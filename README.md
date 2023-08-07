@@ -37,6 +37,7 @@ NOTESS:
     - you can see new outputs over here
   - terraform destroy -target aws_instance.web_instance
   - terraform apply -target aws_instance.web_instance
+  - terraform apply -var-file exampel.tfvars
 
 # Resources and relations
 

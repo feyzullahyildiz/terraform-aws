@@ -1,13 +1,12 @@
 provider "aws" {
+  profile = "default"
   region     = "eu-central-1"
-  access_key = "AKIA5PADAESCFIPZRAYZ"
-  secret_key = "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"
 }
 
 variable "subnet_prefix" {
   description = "cidr block for the subnet"
-  # default
-  # type = String
+  default     = "10.0.1.0/24"
+  # type = string
 }
 resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
@@ -34,8 +33,8 @@ resource "aws_route_table" "prod-route-table" {
   }
 
   route {
-    ipv6_cidr_block        = "::/0"
-    gateway_id = aws_internet_gateway.gw.id
+    ipv6_cidr_block = "::/0"
+    gateway_id      = aws_internet_gateway.gw.id
   }
 
   tags = {
@@ -46,8 +45,20 @@ resource "aws_route_table" "prod-route-table" {
 
 resource "aws_subnet" "subnet-1" {
   vpc_id            = aws_vpc.prod-vpc.id
-  cidr_block        = var.subnet_prefix
+  cidr_block        = var.subnet_prefix[0].cidr_block
   availability_zone = "eu-central-1a"
+  tags = {
+    Name = var.subnet_prefix[0].name
+  }
+}
+
+resource "aws_subnet" "subnet-2" {
+  vpc_id            = aws_vpc.prod-vpc.id
+  cidr_block        = var.subnet_prefix[1].cidr_block
+  availability_zone = "eu-central-1a"
+    tags = {
+    Name = var.subnet_prefix[1].name
+  }
 }
 
 resource "aws_route_table_association" "a" {
@@ -121,12 +132,12 @@ output "server_public_ip" {
 }
 
 resource "aws_instance" "web_instance" {
-  ami = "ami-04e601abe3e1a910f"
-  instance_type = "t2.micro"
+  ami               = "ami-04e601abe3e1a910f"
+  instance_type     = "t2.micro"
   availability_zone = "eu-central-1a"
-  key_name = "main-key"
+  key_name          = "main-key"
   network_interface {
-    device_index = 0
+    device_index         = 0
     network_interface_id = aws_network_interface.web-server-nic.id
   }
   user_data = <<-EOF
