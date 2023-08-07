@@ -72,9 +72,9 @@ resource "aws_security_group" "allow_web" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
-    description = "HTTP"
-    from_port   = 2
-    to_port     = 2
+    description = "SSH"
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -111,6 +111,10 @@ resource "aws_eip" "one" {
   depends_on                = [aws_internet_gateway.gw]
 }
 
+# Print IP of server
+output "server_public_ip" {
+  value = aws_eip.one.public_ip
+}
 
 resource "aws_instance" "web_instance" {
   ami = "ami-04e601abe3e1a910f"
