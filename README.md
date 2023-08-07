@@ -31,6 +31,12 @@ NOTESS:
 - terraform state show {resource_name}
   - terraform state show aws_eip.one
   - terraform state show aws_instance.web_instance
+  - terraform output
+    - it will print last output values. If you add new output, you might not see it
+  - terraform refresh
+    - you can see new outputs over here
+  - terraform destroy -target aws_instance.web_instance
+  - terraform apply -target aws_instance.web_instance
 
 # Resources and relations
 

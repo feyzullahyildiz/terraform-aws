@@ -1,10 +1,14 @@
 provider "aws" {
   region     = "eu-central-1"
-  access_key = "AKIA5PADAESCNVSEXMNP"
-  secret_key = "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"
+  access_key = "AKIA5PADAESCFIPZRAYZ"
+  secret_key = "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"
 }
 
-
+variable "subnet_prefix" {
+  description = "cidr block for the subnet"
+  # default
+  # type = String
+}
 resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
   tags = {
@@ -42,7 +46,7 @@ resource "aws_route_table" "prod-route-table" {
 
 resource "aws_subnet" "subnet-1" {
   vpc_id            = aws_vpc.prod-vpc.id
-  cidr_block        = "10.0.1.0/24"
+  cidr_block        = var.subnet_prefix
   availability_zone = "eu-central-1a"
 }
 
